@@ -11,6 +11,7 @@ function Square({value, onSquareClick}) {
 export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
 
+
   function handleClick(i) {
     const nextSquares = squares.slice()
     nextSquares[i] = 'X'
@@ -137,7 +138,21 @@ Sets the value of the square at the index i to 'X'. In a full game,
 this would likely alternate between 'X' and 'O', depending on the current player, 
 but in this simplified version, it always sets to 'X'.
 
-setSquares(nextSquares)
-Updates the squares state with the new array where one of the values has been changed to 'X'.
 
+setSquares(nextSquares)
+squares has 9 nine values. It doesn't define the grid or layout.
+It selects the code in the the board-row div when the handleClick function is executed.
+
+(Updates the squares state with the new array where one of the values has been changed to 'X'.)
+
+    nextSquares[i] = 'X'
+    setSquares(nextSquares)
+*/
+
+
+/*
+OTHER NOTES:
+
+useState is a React hook that returns an array with two elements. 
+The first element is the current state, and the second element is a function that updates this state.
 */
