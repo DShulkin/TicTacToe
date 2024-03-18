@@ -13,9 +13,10 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   function handleClick(i) {
-      if (squares[i]) {
-        return
-      }
+    if (squares[i]) {
+      return
+    }
+
     const nextSquares = squares.slice()
     if (xIsNext) {
       nextSquares[i] = "X"
@@ -23,8 +24,7 @@ export default function Board() {
       nextSquares[i] = "O"
     }
     setSquares(nextSquares)
-    setXIsNext(!xIsNext)   /* flips the value of the boolean on the next players turn */
-
+    setXIsNext(!xIsNext) 
   }
 
   return (
@@ -59,4 +59,18 @@ overwrite the X with an O or vice-versa.
 SOLUTION:
 You can fix this by returning early. You’ll check to see if the square already has a X or an O. 
 If the square is already filled, you will return in the handleClick function early—before it tries to update the board state.
+
+v
+v
+v
+
+Conditional Check: The function starts with a conditional check if (squares[i]). This checks whether the square at index i has already been 
+filled ("X" or "O"). If the square is not null (meaning it's already been clicked), the function will return early and do nothing. 
+This prevents players from changing the value of a square that has already been filled.
+
+  function handleClick(i) {
+    if (squares[i]) {
+      return
+    }
+
 */
