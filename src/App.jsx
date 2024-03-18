@@ -9,13 +9,19 @@ function Square({value, onSquareClick}) {
 }
 
 export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true)
   const [squares, setSquares] = useState(Array(9).fill(null))
-
 
   function handleClick(i) {
     const nextSquares = squares.slice()
-    nextSquares[i] = 'X'
+    if (xIsNext) {
+      nextSquares[i] = "X"
+    } else {
+      nextSquares[i] = "O"
+    }
     setSquares(nextSquares)
+    setXIsNext(!xIsNext)   /* flips the value of the boolean on the next players turn */
+
   }
 
   return (
@@ -42,117 +48,19 @@ export default function Board() {
 
 
 
-
-/*
-Now you can again add X’s to any square on the board by clicking on them.
-But this time all the state management is handled by the Board component.
-*/ 
-
-
-
-/*
-The problem starts when you change the code to onSquareClick={handleClick(0)}.
-Here, handleClick(0) is called immediately as the Board component renders, not when 
-a Square is clicked. This direct call changes the state, leading to a re-render of the 
-Board component, which calls handleClick(0) again, and so on, creating an infinite loop.
-*/ 
-
-
-
-
-/*
-The corrected approach, involves using arrow functions: onSquareClick={() => handleClick(0)}. 
-This change ensures that handleClick(0) is not called during the rendering process. 
-Instead, you're passing a new function that, when triggered by a click event, calls handleClick(0). 
-This function is created anew during each render but does not execute handleClick(0) until a Square is actually clicked.
-*/ 
-
-
-
-
 /* 
-HOW THIS WORKS AS A WHOLE CURRENTLY:
-State handling is in the Board component, the parent Board component passes props to the child Square components 
-so that they can be displayed correctly. When clicking on a Square, the child Square component now asks the parent Board component to update 
-the state of the board. When the Board’s state changes, both the Board component and every child Square re-renders automatically. 
-Keeping the state of all squares in the Board component will allow it to determine the winner in the future.
-*/
+The xIsNext boolean toggles between true and false after every move to alternate 
+turns between "X" and "O". Here's how the cycle works, assuming "X" starts:
 
+Initially, xIsNext is set to true, indicating it's "X's" turn.
 
+When the first move is made (let's say by "X"), handleClick is executed:
+"X" is placed on the board because xIsNext is true.
+At the end of handleClick, setXIsNext(!xIsNext) is called. Since xIsNext was true, !xIsNext is false, 
+so setXIsNext(false) is executed. Now xIsNext becomes false, indicating it's "O's" turn.
 
-
-/* 
-HOW THIS WORKS LINE BY LINEv
-
-import { useState } from 'react';
-This line imports the useState hook from the React library. 
-Hooks are functions that let you “hook into” React state and lifecycle features from function components.
-
-
-function Square({value, onSquareClick}) {
-Defines a functional component named Square. This component takes props value and onSquareClick. 
-value will be used to display the value of the square ('X', 'O', or null), and onSquareClick is a function 
-that will be called when the square is clicked.
-
-
-return (
-Starts the return statement of the Square component.
-
-
-<button className="square" onClick={onSquareClick}>
-Returns a button element with a class name "square". 
-It also sets an onClick event handler to the onSquareClick function passed in through the props.
-
-
-{value}
-This displays the value prop inside the button. 
-This will be the content of the square ('X', 'O', or null).
-
-
-</button> )
-Closes the button element and the return statement of the Square component.
-
-
-export default function Board() {
-Defines and exports a functional component named Board. 
-This is where the state of the tic-tac-toe board and the logic of the game will be managed.
-
-const [squares, setSquares] = useState(Array(9).fill(null))
-Initializes the state squares with an array of 9 null elements. 
-This represents the 9 squares of the tic-tac-toe board, initially empty. 
-setSquares is the function that will be used to update this state.
-
-
-function handleClick(i) {
-Defines a function named handleClick, which takes an index i. 
-This function updates the state of the board when a square is clicked.
-
-
-const nextSquares = squares.slice()
-Creates a shallow copy of the squares array to ensure immutability. 
-Changes should be made to this copy rather than the original state directly.
-
-
-nextSquares[i] = 'X'
-Sets the value of the square at the index i to 'X'. In a full game, 
-this would likely alternate between 'X' and 'O', depending on the current player, 
-but in this simplified version, it always sets to 'X'.
-
-
-setSquares(nextSquares)
-squares has 9 nine values. It doesn't define the grid or layout.
-It selects the code in the the board-row div when the handleClick function is executed.
-
-(Updates the squares state with the new array where one of the values has been changed to 'X'.)
-
-    nextSquares[i] = 'X'
-    setSquares(nextSquares)
-*/
-
-
-/*
-OTHER NOTES:
-
-useState is a React hook that returns an array with two elements. 
-The first element is the current state, and the second element is a function that updates this state.
+When the second move is made (now by "O"), handleClick is executed again:
+"O" is placed on the board because xIsNext is false.
+At the end of handleClick, setXIsNext(!xIsNext) is called. This time, since xIsNext was false, !xIsNext is true, 
+so setXIsNext(true) is executed. Now xIsNext becomes true again, indicating it's "X's" turn once more.
 */
