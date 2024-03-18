@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
 function Square({value, onSquareClick}) {
   return ( 
@@ -13,6 +13,9 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   function handleClick(i) {
+      if (squares[i]) {
+        return
+      }
     const nextSquares = squares.slice()
     if (xIsNext) {
       nextSquares[i] = "X"
@@ -46,26 +49,14 @@ export default function Board() {
 }
 
 
-
-
 /* 
-The xIsNext boolean toggles between true and false after every move to alternate 
-turns between "X" and "O". Here's how the cycle works, assuming "X" starts:
+PROBLEM:
+When you mark a square with a X or an O you aren’t first checking to see if the square already has a X or O value
 
-Initially, xIsNext is set to true, indicating it's "X's" turn.
+- This means that when a player marks an X or O the next player can click on the same square the first player clicked on and 
+overwrite the X with an O or vice-versa.
 
-When the first move is made (let's say by "X"), handleClick is executed:
-"X" is placed on the board because xIsNext is true.
-At the end of handleClick, setXIsNext(!xIsNext) is called. Since xIsNext was true, !xIsNext is false, 
-so setXIsNext(false) is executed. Now xIsNext becomes false, indicating it's "O's" turn.
-
-When the second move is made (now by "O"), handleClick is executed again:
-"O" is placed on the board because xIsNext is false.
-At the end of handleClick, setXIsNext(!xIsNext) is called. This time, since xIsNext was false, !xIsNext is true, 
-so setXIsNext(true) is executed. Now xIsNext becomes true again, indicating it's "X's" turn once more.
+SOLUTION:
+You can fix this by returning early. You’ll check to see if the square already has a X or an O. 
+If the square is already filled, you will return in the handleClick function early—before it tries to update the board state.
 */
-
-/* 
-THIS IS A A TEST PUSH. NOTHING HERE HAS CHANGED
-*/
-
