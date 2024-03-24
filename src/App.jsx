@@ -13,7 +13,7 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   function handleClick(i) {
-    if (squares[i]) {
+    if (squares[i] || calculateWinner(squares)) {
       return
     }
 
@@ -48,29 +48,66 @@ export default function Board() {
   )
 }
 
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ]
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i]
+    if (squares[a] 
+     && squares[a] === squares[b] 
+     && squares[a] === squares[c]) {
+      return squares[a]
+    }
+  }
+  return null
+}
 
 /* 
-PROBLEM:
-When you mark a square with a X or an O you aren’t first checking to see if the square already has a X or O value
+Setup Possible Winning Lines:
+const lines = [...]: This part of the code defines an array called lines. Each element of this array is another array containing three indices. 
+These inner arrays represent the eight possible winning lines in a tic-tac-toe board: three rows, three columns, and two diagonals.
 
-- This means that when a player marks an X or O the next player can click on the same square the first player clicked on and 
-overwrite the X with an O or vice-versa.
+Iterate Over the Winning Lines:
+for (let i = 0; i < lines.length; i++) {: 
+This loop iterates through each set of winning line combinations.
 
-SOLUTION:
-You can fix this by returning early. You’ll check to see if the square already has a X or an O. 
-If the square is already filled, you will return in the handleClick function early—before it tries to update the board state.
+Destructure the Line Indices:
+const [a, b, c] = lines[i]: 
+This uses array destructuring to assign the indices of the current winning line to the variables a, b, and c. 
+Each of these variables represents an index in the squares array where the players' moves are recorded.
 
-v
-v
-v
+Check for a Winner:
+if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {: 
+This checks if the squares at positions a, b, and c are all filled and are the same (all 'X's or all 'O's). This condition does several things:
+squares[a] checks that the square at index a is not null (i.e., it has been filled).
+squares[a] === squares[b] checks that the squares at indices a and b are filled with the same symbol.
+squares[a] === squares[c] checks that the squares at indices a and c are also filled with the same symbol.
+If all these conditions are true, it means all three squares in a line are filled with the same symbol (all 'X's or all 'O's), and thus a player has won.
 
-Conditional Check: The function starts with a conditional check if (squares[i]). This checks whether the square at index i has already been 
-filled ("X" or "O"). If the square is not null (meaning it's already been clicked), the function will return early and do nothing. 
-This prevents players from changing the value of a square that has already been filled.
+Return the Winner:
+return squares[a]: If a winning condition is met, the function returns the symbol ('X' or 'O') of the winning player.
+No Winner Found:
 
-  function handleClick(i) {
-    if (squares[i]) {
-      return
-    }
-
+return null: If no winning combinations are found (meaning the loop completes without returning), the function returns null, indicating that there is no winner yet
 */
+
+
+
+
+/* 
+Here we're calling the calculateWinner(squares) function in the Board componenets handleClick function to chekc if a player has won.
+The calculateWinner(squares) is checked at the same time you check if a user has clicked a square that already has a X or and O
+function handleClick(i) {
+  if (squares[i] || calculateWinner(squares)) {
+    return
+  }
+  */
