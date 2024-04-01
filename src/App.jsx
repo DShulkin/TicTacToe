@@ -61,10 +61,15 @@ export default function Game() {
   const [xIsNext, setXIsNext] = useState(true)
   const [history, setHistory] = useState([Array(9).fill(null)])
   const currentSquares = history[history.length - 1]
+
+  function handlePlay(nextSquares) {
+
+  }
+
   return (
     <div className="game">
       <div className="board">
-        <Board />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
         <ol>{/*TODO*/}</ol>
@@ -99,6 +104,7 @@ function calculateWinner(squares) {
 
 
 /*
+
 export default function Game() { }
 This tells your index.js file to use the Game component as the top-level component 
 instead of your Board component.
@@ -107,10 +113,21 @@ instead of your Board component.
 const [xIsNext, setXIsNext] = useState(true);
 Tracks which player is next.
 
+
 const [history, setHistory] = useState([Array(9).fill(null)])
 The history state is an array of game states, where each game state represents 
 the state of the board at a certain point in time. Each element in the history array is an array 
 of 9 elements representing the 9 squares (9 null values).
+
+---- Notice how [Array(9).fill(null)] is an array with a single item, which itself is an array of 9 nulls.
+
+---- Uses array destructuring to get two items from the array returned by useState:
+
+---- history is the current state value. It starts as [Array(9).fill(null)], which is an array containing a single element 
+     that is an array of 9 null values. This represents the initial state of the game board.
+
+---- setHistory is a function that allows you to update history. When you call setHistory with a new value, it updates history 
+     to that new value and re-renders the component with the updated state.
 
 
 history[history.length - 1]
