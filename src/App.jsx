@@ -172,6 +172,10 @@ The Board() will call the new onPlay function with the updated squares array whe
      the Board() with a single call to the onPlay function so that Game() can update the Board when a user
      clicks a square.
 ---- The Board passes the updated squares array to onPlay
+     ---- For example. If the player clicked on the top left square, the fist squares array stored looks like this:
+          
+         onPlay(nextSquares)
+         ['X', null, null, null, null, null, null, null, null]
 
 
 function handlePlay(nextSquares) { }
