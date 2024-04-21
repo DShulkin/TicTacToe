@@ -13,17 +13,13 @@ function Board({xIsNext, squares, onPlay}) {
     if (squares[i] || calculateWinner(squares)) {
       return
     }
-    // console.log(squares, "BEFORE: squares")
-
     const nextSquares = squares.slice()
     if (xIsNext) {
       nextSquares[i] = "X"
     } else {
       nextSquares[i] = "O"
     }
-    onPlay(nextSquares) // passes nextSquares to the handlePlay function
-
-    // console.log(nextSquares, "AFTER: nextSquares")
+    onPlay(nextSquares) 
   }
 
   const winner = calculateWinner(squares)
@@ -33,7 +29,6 @@ function Board({xIsNext, squares, onPlay}) {
   } else {
     status = "Next Player: " + (xIsNext ? "X" : "O")
   }
-
   return (
     <>
     <div className="status">{status}</div>
@@ -65,8 +60,24 @@ export default function Game() {
     setXIsNext(!xIsNext)
     setHistory([...history, nextSquares])
   }
-  // console.log(currentSquares, "currentSquares")
-  // console.log(history, "history")
+
+  function jumpTo(nextMove) {
+    // TODO
+  }
+
+  const moves = history.map((squares, move) => {
+    let description
+    if (move > 0) {
+      description = 'Go to move #' + move
+    } else {
+      description = 'Go to game start'
+    }
+    return (
+      <li>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    )
+  })
 
   return (
     <div className="game">
@@ -74,7 +85,7 @@ export default function Game() {
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{/*TODO*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   )
@@ -102,44 +113,3 @@ function calculateWinner(squares) {
   }
   return null
 }
-
-
-
-/*
-
-        The squares prop in the Board component holds the value of currentSquares from the Game component. 
-        Passing State as Prop: When you pass currentSquares as squares to the Board component, you are effectively making 
-        the current state of the game board (held in currentSquares) accessible to the Board component under the name squares.
-
-        Use of squares in Board: Inside the Board component, this prop (squares) is then used to render each Square component. 
-        Each square's value (either "X", "O", or null) is determined by the respective element in the squares array. 
-
-
-
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-        Prop Assignment: In the Game component, the handlePlay function is assigned to the onPlay prop of the Board component:
-        This means that within the Board component, onPlay is essentially a reference to the handlePlay function defined in the Game component.
-
-
-        onPlay(nextSquares);
-        When onPlay() is called within the Board component, it is effectively invoking the handlePlay 
-        function with nextSquares as the argument. This connection between onPlay and handlePlay is 
-        established through the prop passing mechanism.
-        Calling onPlay: Inside the Board component, whenever a valid move is made (the square is unoccupied and there’s no winner), the handleClick 
-        function creates the nextSquares array (which reflects the new state of the board after the move) and then calls onPlay with the array above:
-
-        onPlay adds the following 'nextSquares' array to to the handlePlay function which then
-        stores the nextSquares array into 'history' via setHistory([...history, nextSquares]) 
-
-        NOTE:
-        The invocation onPlay(nextSquares) is effectively the same as handlePlay(nextSquares)
-
-
-        function handlePlay(nextSquares) {
-        setHistory([...history, nextSquares]);
-        setXIsNext(!xIsNext);
-        Function Execution: As a result, back in the Game component, handlePlay is executed with the provided nextSquares:
-        This function then updates the game’s history with the new board state and toggles the player turn.
-
-
-*/
