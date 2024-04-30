@@ -54,6 +54,7 @@ function Board({xIsNext, squares, onPlay}) {
 export default function Game() {
   const [xIsNext, setXIsNext] = useState(true)
   const [history, setHistory] = useState([Array(9).fill(null)])
+  const [currentMove, setCurrentMove] = useState(0)
   const currentSquares = history[history.length - 1]
 
   function handlePlay(nextSquares) {
@@ -62,7 +63,8 @@ export default function Game() {
   }
 
   function jumpTo(nextMove) {
-    // TODO
+    setCurrentMove(nextMove)
+    setXIsNext(nextMove % 2 === 0)
   }
 
   const moves = history.map((squares, move) => {
@@ -73,7 +75,7 @@ export default function Game() {
       description = 'Go to game start'
     }
     return (
-      <li>
+      <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     )
@@ -81,7 +83,7 @@ export default function Game() {
 
   return (
     <div className="game">
-      <div className="board">
+      <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
@@ -113,3 +115,27 @@ function calculateWinner(squares) {
   }
   return null
 }
+
+/* 
+
+
+const [currentMove, setCurrentMove] = useState(0)
+
+  keep track of which step the user is currently viewing. 
+  To do this, define a new state variable called 
+  currentMove, defaulting to 0
+
+-----------------------------------------------------------------------------------------
+
+setXIsNext(nextMove % 2 === 0)
+
+    % 2 === 0: This expression is used to check if nextMove is an even number.
+    The modulus operator (%) calculates the remainder of the division of nextMove by 2.
+    If the remainder is 0 (meaning nextMove is evenly divisible by 2), then the result is true.
+
+    (Sets xIsNext to true if the number that you’re changing currentMove to is even.)
+
+-----------------------------------------------------------------------------------------
+
+
+*/
