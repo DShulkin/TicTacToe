@@ -20,6 +20,7 @@ function Board({xIsNext, squares, onPlay}) {
       nextSquares[i] = "O"
     }
     onPlay(nextSquares) 
+    // console.log(nextSquares, "nextSquares")
   }
 
   const winner = calculateWinner(squares)
@@ -62,26 +63,33 @@ export default function Game() {
     setHistory(nextHistory)
     setCurrentMove(nextHistory.length - 1)
     setXIsNext(!xIsNext)
+
+      // console.log(nextHistory, 'nextHistory')
+      // console.log(nextHistory.length - 1, "setCurrentMove")
   }
+      // console.log(currentMove, "currentMove")
+      // console.log(currentSquares, 'currentSquares')
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove)
     setXIsNext(nextMove % 2 === 0)
   }
 
-  const moves = history.map((squares, move) => {
+  const moves = history.map((squares, move) => {  
     let description
     if (move > 0) {
       description = 'Go to move #' + move
     } else {
       description = 'Go to game start'
     }
+        // console.log(move, 'move')
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     )
   })
+  
 
   return (
     <div className="game">
@@ -131,7 +139,9 @@ const [currentMove, setCurrentMove] = useState(0)
   To do this, define a new state variable called 
   currentMove, defaulting to 0
 
+
 --------------------------------------------------------------------------------------------------
+
 
 setXIsNext(nextMove % 2 === 0)
 
@@ -140,6 +150,7 @@ setXIsNext(nextMove % 2 === 0)
     If the remainder is 0 (meaning nextMove is evenly divisible by 2), then the result is true.
 
     (Sets xIsNext to true if the number that you’re changing currentMove to is even.)
+
 
 --------------------------------------------------------------------------------------------------
 
@@ -153,6 +164,12 @@ setXIsNext(nextMove % 2 === 0)
     If currentMove is 0, history.slice(0, currentMove + 1) will return the array with the first move (index 0) included.
     If currentMove is 1, history.slice(0, currentMove + 1) will return an array with the first two moves (indexes 0 and 1) included.
     And so on. Therefore, adding + 1 ensures that the slice includes all moves up to and including the current move.
+
+    Remember: index indices begin at 0
+    If currentMove is 1, history.slice(0, 1 + 1)
+    It might look something like this: [null, null, null, null, 'X', 'X', null, null, 'O']
+
+    
   
   ALT NOTE:
     Here's why the + 1 is necessary:
@@ -168,6 +185,7 @@ setXIsNext(nextMove % 2 === 0)
     moves up to the current move, followed by the latest move stored in nextSquares.
 
     So, essentially, nextHistory represents the updated history of moves in the game after a new move (nextSquares) is made.
+
 
   --------------------------------------------------------------------------------------------------
 
@@ -197,5 +215,68 @@ setXIsNext(nextMove % 2 === 0)
     on the game board based on the state stored in the history array at the current move. 
     This allows the Board component to render the game board accurately based on the current 
     state of the gam
+
+
+  --------------------------------------------------------------------------------------------------
+
+
+    The first occurrence of setCurrentMove is within the handlePlay function:
+
+      function handlePlay(nextSquares) {
+        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares]
+        setHistory(nextHistory)
+        setCurrentMove(nextHistory.length - 1); // First occurrence
+        setXIsNext(!xIsNext)
+      }
+
+    Here, setCurrentMove(nextHistory.length - 1) updates the currentMove state to reflect 
+    the index of the last move made in the game's history after a new move is played.
+
+
+  --------------------------------------------------------------------------------------------------
+
+
+    The second occurrence is within the jumpTo function:
+
+      function jumpTo(nextMove) {
+        setCurrentMove(nextMove) // Second occurrence
+        setXIsNext(nextMove % 2 === 0)
+      }
+
+    Here, setCurrentMove(nextMove) updates the currentMove state to navigate to a specific 
+    move in the game's history when the user clicks on a move in the list of moves.
+
+    Both occurrences serve different purposes: one is for updating the current move after a new move is played, 
+    and the other is for navigating to a specific move when the user selects a move from the list.
+
+
+  --------------------------------------------------------------------------------------------------
+
+
+    const currentSquares = history[currentMove]
+    
+      Renders the currently selected move instead of always rendering the final move
+
+      history: 
+      This variable holds an array that stores the game board state at different points in time. 
+      Each element in this array represents the state of the board at a particular move.
+
+      currentMove: 
+      This variable keeps track of which move the game is currently at. It indicates 
+      the index in the history array where the current game state is stored.
+
+      history[currentMove] 
+      This expression accesses the element in the history array at the index specified by currentMove. 
+      This element contains the game board state at the current move.
+
+      const currentSquares: 
+      This variable is assigned the value retrieved from history[currentMove], 
+      which represents the game board state at the current move. It's named currentSquares, implying 
+      that it holds the current state of the squares on the game board.
+
+
+      So, currentSquares essentially represents the current configuration of the squares on the game board based 
+      on the state stored in the history array at the current move. This allows the Board component to render the
+     game board accurately based on the current state of the game.
 
 */
