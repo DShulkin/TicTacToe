@@ -1,1 +1,1 @@
-This project showcases a Tic-Tac-Toe game built with React, focusing on component-based design, state-driven rendering, and user interaction. Game logic, move tracking, and real-time interface updates work together to demonstrate the fundamentals of building interactive applications with React.
+A Tic-Tac-Toe game built with React, focusing on component-based design, state-driven rendering, and user interaction. Game logic, move tracking, and real-time interface updates work together to demonstrate the fundamentals of building interactive applications with React.
